@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+    <style>
+        
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f4f4;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fce4ec; /* Otro color pastel */
+}
+
+.left-bar, .right-bar {
+  width: 200px;
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #e8e8e8;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.chat-header {
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.ad {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #ff4081; /* Color llamativo */
+  color: #fff;
+}
+
+#chat-container {
+  flex: 1;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  overflow-y: scroll;
+}
+
+#user-input {
+  border: 1px solid #ccc;
+  padding: 10px;
+  resize: none;
+  margin-top: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+button {
+  background-color: #ff4081; /* Color llamativo */
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+  background-color: #d81b60; /* Color de resalte al pasar el mouse */
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+    </style>
+<head>
+    <meta charset="UTF-8">
+    <title>Pacame IA Chat</title>
+    <link rel="stylesheet" type="text/css" href="estilos.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-bar">
+            <div class="ad">Publicidad Izquierda</div>
+        </div>
+        <div class="content">
+            <div class="chat-header">Pacame IA</div>
+            <div id="chat-container"></div>
+            <textarea id="user-input" placeholder="Escribe tu mensaje..."></textarea>
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
+        <div class="right-bar">
+            <div class="ad">Publicidad Derecha</div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input').value;
+            const chatContainer = document.getElementById('chat-container');
+
+            // Agrega el mensaje del usuario al contenedor de chat
+            chatContainer.innerHTML += '<p><strong>Tú:</strong> ' + userInput + '</p>';
+
+            // Realiza la solicitud a la API de Pacame IA (o tu propia API)
+            try {
+                const response = await axios.post('/api/openai/tu-servidor', { message: userInput });
+
+                // Verifica la estructura de la respuesta
+                if (response.data && response.data.choices && response.data.choices.length > 0) {
+                    const pacameResponse = response.data.choices[0].message.content;
+                    chatContainer.innerHTML += '<p><strong>Pacame IA:</strong> ' + pacameResponse + '</p>';
+                } else {
+                    throw new Error('Estructura de respuesta no válida');
+                }
+            } catch (error) {
+                console.error('Error al obtener la respuesta de Pacame IA', error);
+                chatContainer.innerHTML += '<p><strong>Pacame IA:</strong> Lo siento, ocurrió un error.</p>';
+            }
+
+            // Borra el contenido del cuadro de entrada
+            document.getElementById('user-input').value = '';
+        }
+    </script>
+</body>
+</html>
