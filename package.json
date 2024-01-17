@@ -16,6 +16,7 @@
     "mongo": "^0.1.0",
     "mongodb": "^6.2.0",
     "mongoose": "^8.0.0",
-    "mongose": "^0.0.2-security"
+    "mongose": "^0.0.2-security",
+    "axios": "^1.4.6"
   }
 }
